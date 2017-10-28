@@ -5,11 +5,13 @@
  */
 
 import React, { Component } from 'react';
+import { combineReducers, createStore } from 'redux';
 
 import AppWithNavigationState from '../src/navigators';
 import { Provider } from 'react-redux';
-import appReducer from './reducers';
-import { createStore } from 'redux';
+import { navReducer }  from './reducers';
+
+const appReducer = combineReducers({navReducer});
 
 const store = createStore(appReducer);
 

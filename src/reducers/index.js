@@ -1,6 +1,6 @@
+import { HOME, LOGIN } from "../actions/actionType";
+
 import { AppNavigator } from '../navigators';
-import { NavigationActions } from 'react-navigation';
-import { combineReducers } from 'redux';
 
 const ParamsAction = {
     login: AppNavigator.router.getActionForPathAndParams('Login'),
@@ -8,32 +8,26 @@ const ParamsAction = {
 };
 
 const actionLogin = AppNavigator.router.getStateForAction(ParamsAction.login);
+const actionHome = AppNavigator.router.getStateForAction(ParamsAction.home);
 
-const initNavState = AppNavigator.router.getStateForAction(ParamsAction.home, actionLogin);
+const initNavState = actionLogin;//AppNavigator.router.getStateForAction(ParamsAction.login, ParamsAction.home);
 
-navReducer = (state = initNavState, action) => {
+export const navReducer = (state = initNavState, action) => {
     let nextState;
-    switch(action.type){
+    console.log("navReducer");
+    console.log(action);
+    switch (action.type) {
+        case LOGIN:
+            nextState = AppNavigator.router.getStateForAction(ParamsAction.login, state);
+            break;
+        case HOME:
+            console.log("HOME - ACTION");
+            nextState = AppNavigator.router.getStateForAction(ParamsAction.home, state);
+            break;
         default:
             nextState = AppNavigator.router.getStateForAction(action, state);
             break;
     }
 
     return nextState || state;
-}
-
-const initAuthState = { isLoggedIn: false }
-
-authReducer = (state = initAuthState, action) => {
-    switch(action.type){
-        case 'Login': 
-            return {...state, isLoggedIn: true }
-        case 'Logout':
-            return {...state, isLoggedIn: false }
-        default: 
-            return state;
-    }
-}
-
-const AppReducer = combineReducers({nav: navReducer, auth: authReducer});
-export default AppReducer;
+};
