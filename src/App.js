@@ -6,12 +6,19 @@
 
 import React, { Component } from 'react';
 
-import HomeScreen from '../src/components/HomeScreen';
+import AppWithNavigationState from '../src/navigators';
+import { Provider } from 'react-redux';
+import appReducer from './reducers';
+import { createStore } from 'redux';
 
-export default class App extends Component<{}> {
+const store = createStore(appReducer);
+
+export default class App extends React.Component {
   render() {
     return (
-      <HomeScreen />
+      <Provider store={store}>
+          <AppWithNavigationState />
+      </Provider>
     );
   }
 }
